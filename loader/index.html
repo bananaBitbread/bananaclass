@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iframe Loader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body {
+    margin: 0;
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+.iframe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.bottom-bar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="iframe-container">
+    <iframe id="mainframe" src="/404/"></iframe>
+</div>
+
+<div class="bottom-bar">
+    <a id="openBlank" href="javascript:void(0)"><i class="fas fa-external-link-alt"></i></a>
+    <a id="downloadFrame" href="javascript:void(0)"><i class="fas fa-download"></i></a>
+</div>
+
+<script>
+function getQ() {
+    const p = new URLSearchParams(location.search);
+    return p.get("q") || "";
+}
+
+const url = getQ();
+if (url) {
+    document.getElementById("mainframe").src = url;
+}
+
+document.getElementById("openBlank").onclick = () => {
+    if (!url) return;
+    const win = window.open("about:blank");
+    const doc = win.document;
+    doc.open();
+    doc.write(`<iframe src="${url}" style="position:fixed;top:0;left:0;width:100%;height:100%;border:0;"></iframe>`);
+    doc.close();
+};
+
+document.getElementById("downloadFrame").onclick = () => {
+    if (!url) return;
+
+    const html = `
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Fullscreen Frame</title></head>
+<body style="margin:0;overflow:hidden;">
+<iframe src="${url}" style="position:fixed;top:0;left:0;width:100vw;height:100vh;border:0;"></iframe>
+</body></html>`;
+
+    const blob = new Blob([html], {type: "text/html"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "openframe.html";
+    a.click();
+};
+</script>
+</body>
+</html>
