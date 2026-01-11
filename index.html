@@ -1,2 +1,349 @@
-hiiii.....
-<a href="loader?q=https://24.ip.nowgg.fun/apps/a/19900/b.html">Roblox</a>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | BananaClassroom</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            font-family: Inter, sans-serif;
+            font-feature-settings: 'liga' 1, 'calt' 1;
+        }
+
+        /* For variable font support in modern browsers */
+        @supports (font-variation-settings: normal) {
+            :root {
+                font-family: 'Inter var', sans-serif;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar:hover {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .apple-logo {
+            width: 24px;
+            height: 24px;
+            color: #1e293b;
+            margin-right: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .apple-logo:hover {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        .nav-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            letter-spacing: -0.025em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Button Grid Styles */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .grid-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            padding: 24px 16px;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid #f1f5f9;
+        }
+
+        .grid-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #e2e8f0;
+        }
+
+        .button-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 16px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #3b82f6;
+        }
+
+        .button-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .button-text {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1e293b;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            margin-top: 80px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .navbar {
+                padding: 14px 20px;
+            }
+            
+            .button-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 16px;
+            }
+            
+            .button-icon {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" style="background: rgba(255, 255, 255, 0.98); box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;">
+      <i data-lucide="banana" class="apple-logo"></i>  
+      <span class="nav-text">BananaClassroom</span>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Transform Learning Experiences</h1>
+            <p>BananaClassroom provides cutting-edge educational technology solutions to empower students and educators worldwide.</p>
+            <a href="/" class="btn">Get Started</a>
+        </section>
+
+        <h2 class="section-title">Learning Resources</h2>
+        <div class="button-grid" id="buttonGrid">
+            <!-- Buttons will be added here dynamically -->
+        <a href="mathematics.htm" class="grid-button"><div class="button-icon">M</div><div class="button-text">Mathematics</div></a><a href="sciencelabs.htm" class="grid-button"><div class="button-icon">S</div><div class="button-text">Science Lab</div></a><a href="literaryarts.htm" class="grid-button"><div class="button-icon">L</div><div class="button-text">Literature</div></a><a href="worldhistory.htm" class="grid-button"><div class="button-icon">H</div><div class="button-text">History</div></a><a href="artstudio.htm" class="grid-button"><div class="button-icon">A</div><div class="button-text">Art Studio</div></a><a href="coding.htm" class="grid-button"><div class="button-icon">C</div><div class="button-text">Coding</div></a><a href="#" class="grid-button"><div class="button-icon">M</div><div class="button-text">Music</div></a><a href="#" class="grid-button"><div class="button-icon">L</div><div class="button-text">Languages</div></a><a href="#" class="grid-button"><div class="button-icon">P</div><div class="button-text">Physics</div></a><a href="#" class="grid-button"><div class="button-icon">C</div><div class="button-text">Chemistry</div></a><a href="#" class="grid-button"><div class="button-icon">B</div><div class="button-text">Biology</div></a><a href="#" class="grid-button"><div class="button-icon">G</div><div class="button-text">Geography</div></a></div>
+    </div>
+
+    <footer>
+        <p>© 2026 BananaClassroom. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Button data - you can add as many buttons as you want here
+        const buttons = [
+            {
+                name: "Mathematics",
+                url: "mathematics.htm"
+            },
+            {
+                name: "Science Lab",
+                url: "sciencelabs.htm"
+            },
+            {
+                name: "Literature",
+                url: "literaryarts.htm"
+            },
+            {
+                name: "History",
+                url: "worldhistory.htm"
+            },
+            {
+                name: "Art Studio",
+                url: "artstudio.htm"
+            },
+            {
+                name: "Coding",
+                url: "coding.htm"
+            },
+            {
+                name: "Music",
+                url: "#"
+            },
+            {
+                name: "Languages",
+                url: "#"
+            },
+            {
+                name: "Physics",
+                url: "#"
+            },
+            {
+                name: "Chemistry",
+                url: "#"
+            },
+            {
+                name: "Biology",
+                url: "#"
+            },
+            {
+                name: "Geography",
+                url: "#"
+            }
+        ];
+
+        // Function to create button grid
+        function createButtonGrid() {
+            const grid = document.getElementById('buttonGrid');
+            
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('a');
+                buttonElement.href = button.url;
+                buttonElement.className = 'grid-button';
+                
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'button-icon';
+                
+                // If image is provided, use it. Otherwise, use fallback template
+                if (button.image) {
+                    const img = document.createElement('img');
+                    img.src = button.image;
+                    img.alt = button.name;
+                    iconDiv.appendChild(img);
+                } else {
+                    // Fallback template - use first letter of button name
+                    iconDiv.textContent = button.name.charAt(0);
+                }
+                
+                const textDiv = document.createElement('div');
+                textDiv.className = 'button-text';
+                textDiv.textContent = button.name;
+                
+                buttonElement.appendChild(iconDiv);
+                buttonElement.appendChild(textDiv);
+                
+                grid.appendChild(buttonElement);
+            });
+        }
+
+        // Initialize the button grid when page loads
+        document.addEventListener('DOMContentLoaded', createButtonGrid);
+    </script>
+
+</body></html>
