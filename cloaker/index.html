@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Cloaking: title + favicon mimic Google -->
+    <title>Google</title>
+    <link rel="icon" href="https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico" type="image/x-icon">
+
+    <!-- Minimal style: clean, centered, Google-esque -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 16px;
+        }
+
+        .card {
+            max-width: 580px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+            padding: 40px 36px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Google-ish logo area */
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 2px;
+        }
+
+        .logo-letter {
+            font-size: 48px;
+            line-height: 1;
+            font-weight: 500;
+            letter-spacing: -2px;
+        }
+
+        .blue {
+            color: #4285F4;
+        }
+
+        .red {
+            color: #EA4335;
+        }
+
+        .yellow {
+            color: #FBBC05;
+        }
+
+        .green {
+            color: #34A853;
+        }
+
+        /* search-like bar */
+        .url-field {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 1px solid #dfe1e5;
+            border-radius: 42px;
+            outline: none;
+            background: #fff;
+            transition: background 0.1s, box-shadow 0.2s;
+            font-family: inherit;
+            color: #202124;
+            margin-bottom: 28px;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.05);
+        }
+
+        .url-field:hover {
+            border-color: #bdc1c6;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .url-field:focus {
+            border-color: #4285F4;
+            box-shadow: 0 1px 8px rgba(66, 133, 244, 0.3);
+        }
+
+        .url-field::placeholder {
+            color: #9aa0a6;
+            font-size: 15px;
+        }
+
+        /* cloaking options + buttons grouped */
+        .cloak-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #f1f3f4;
+            padding: 6px 14px;
+            border-radius: 32px;
+            font-size: 14px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: #3c4043;
+            user-select: none;
+        }
+
+        .toggle-item input {
+            accent-color: #4285F4;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: #4285F4;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #3367D6;
+            box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border-color: #dadce0;
+            color: #1a0dab;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: #bdc1c6;
+        }
+
+        .info-note {
+            font-size: 13px;
+            color: #5f6368;
+            margin-top: 24px;
+            text-align: center;
+            border-top: 1px solid #e8eaed;
+            padding-top: 20px;
+        }
+
+        .info-note code {
+            background: #f1f3f4;
+            padding: 3px 6px;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            color: #202124;
+        }
+
+        .info-note i {
+            font-style: normal;
+            background: #e6f4ea;
+            color: #137333;
+            padding: 2px 8px;
+            border-radius: 32px;
+            font-size: 12px;
+            margin: 0 4px;
+        }
+
+        /* small print for history / blob */
+        .history-hint {
+            background: #e8f0fe;
+            border-radius: 32px;
+            padding: 6px 16px;
+            font-size: 13px;
+            color: #1a0dab;
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+
+        .history-hint span {
+            font-weight: 600;
+        }
+
+        .blob-badge {
+            background: #f1f3f4;
+            border-radius: 20px;
+            padding: 2px 8px 2px 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .blob-badge::before {
+            content: "📄";
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <!-- Google cloaking (logo) -->
+        <div class="logo-area" aria-label="Google">
+            <span class="logo-letter blue">G</span>
+            <span class="logo-letter red">o</span>
+            <span class="logo-letter yellow">o</span>
+            <span class="logo-letter blue">g</span>
+            <span class="logo-letter green">l</span>
+            <span class="logo-letter red">e</span>
+        </div>
+
+        <!-- subtle history-free hint + blob indicator -->
+        <div class="history-hint">
+            <span>🧩 no-history • blob://</span> &nbsp;—&nbsp; destination won't appear
+        </div>
+
+        <!-- main input: URL -->
+        <input type="text" class="url-field" id="urlInput" placeholder="Paste or type a URL (e.g., https://example.com)" autofocus>
+
+        <!-- cloaking options & buttons -->
+        <div class="cloak-bar">
+            <div class="toggle-group" id="cloakOptions">
+                <label class="toggle-item">
+                    <input type="radio" name="cloak" value="none" checked> <span>🌐 none</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="radio" name="cloak" value="google"> <span>🔎 google</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="radio" name="cloak" value="docs"> <span>📄 docs</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="radio" name="cloak" value="drive"> <span>📁 drive</span>
+                </label>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" id="resetBtn" title="clear input">↺</button>
+                <button class="btn btn-primary" id="goBtn">➜ open incognito</button>
+            </div>
+        </div>
+
+        <!-- informational footer: explains blob & history-free -->
+        <div class="info-note">
+            <span class="blob-badge"></span> <code>blob:null/...</code> viewer — page history stays clean.<br>
+            <i>🕶️</i> uses <strong>blob + iframe sandbox + replace</strong> to avoid history entries.<br>
+            Pasted URL opens inside a hidden context; no extra browser history.
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // === DOM elements ===
+            const urlInput = document.getElementById('urlInput');
+            const goBtn = document.getElementById('goBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const cloakRadios = document.querySelectorAll('input[name="cloak"]');
+
+            // helper: get selected cloak value
+            function getSelectedCloak() {
+                for (let radio of cloakRadios) {
+                    if (radio.checked) return radio.value;
+                }
+                return 'none'; // fallback
+            }
+
+            // helper: basic URL normalization / fallback
+            function normalizeUrl(input) {
+                if (!input || input.trim() === '') return null;
+                let url = input.trim();
+
+                // if no protocol, prepend https:// (unless it looks like a localhost or file – but we keep http/https)
+                if (!/^https?:\/\//i.test(url) && !/^ftp:\/\//i.test(url)) {
+                    // but also don't break blob: or data: — they are allowed but we want to open external pages.
+                    // if it doesn't start with http:// or https://, assume https.
+                    url = 'https://' + url;
+                }
+                try {
+                    // validate if it's a proper URL (will throw if not)
+                    new URL(url);
+                    return url;
+                } catch {
+                    // maybe user forgot TLD etc – still try but show alert later
+                    return url; // we'll attempt, browser may fail
+                }
+            }
+
+            // core function: open a page that won't appear in history, using blob + iframe sandbox + replace
+            function openWithoutHistory(targetUrl, cloakOption) {
+                // 1. Normalize URL
+                const finalUrl = normalizeUrl(targetUrl);
+                if (!finalUrl) {
+                    alert('Please paste or enter a URL.');
+                    return;
+                }
+
+                // validate URL (just to show error early)
+                try {
+                    new URL(finalUrl);
+                } catch (e) {
+                    alert('The entered URL is not valid. Make sure it includes http:// or https://');
+                    return;
+                }
+
+                // 2. Generate a blob HTML content that will embed the target URL
+                //    with sandboxing to prevent top-level navigation & to avoid referrer/history.
+                //    We use iframe with sandbox allowing scripts, same-origin etc, but disables top navigation.
+                //    Also we replace the current page state with blob: using location.replace, so the current
+                //    google-cloak page does not remain in session history (only the blob: page is appended,
+                //    but since we replace, it actually replaces the current entry with the blob.
+                //    However the "google" page is the launching page; we want THAT page not to appear in history.
+                //    By using location.replace(blobURL), we effectively remove the google-cloak page from history
+                //    and put the blob page in its place. The blob page then loads the iframe with target url.
+                //    The final iframe activity does not create additional history entries.
+
+                // Optional: apply "cloak" metadata to the blob html (just visual title/favicon)
+                let pageTitle = 'Google';           // default google cloaking for best camouflage
+                let faviconHref = 'https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico';
+
+                if (cloakOption === 'docs') {
+                    pageTitle = 'Google Docs';
+                    faviconHref = 'https://ssl.gstatic.com/docs/documents/images/kix-favicon-2023q4.ico';
+                } else if (cloakOption === 'drive') {
+                    pageTitle = 'Google Drive';
+                    faviconHref = 'https://ssl.gstatic.com/images/branding/product/ico/drive2020_48dp.ico';
+                } else if (cloakOption === 'none') {
+                    pageTitle = 'about:blank ?';   // fallback but still looks blank-ish
+                    faviconHref = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>';
+                }
+                // else google remains default
+
+                // Build an HTML page that shows an iframe covering the whole viewport
+                // The iframe src is the target URL. We'll use sandbox with "allow-scripts allow-same-origin allow-forms allow-popups" but disallow top navigation.
+                // allow-popups can be omitted for stricter but we keep mild.
+                // Also we set the iframe to referrerpolicy no-referrer for extra privacy.
+                const blobContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageTitle}</title>
+    <link rel="icon" href="${faviconHref}" type="image/x-icon">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: white; }
+        iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* subtle loading indicator (optional) */
+        .loading-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #5f6368; font-family: Arial, sans-serif; opacity: 0.7; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <!-- iframe loading the target URL with privacy-enhanced attributes -->
+    <iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            referrerpolicy="no-referrer"
+            src="${finalUrl}"
+            allow="camera; microphone; fullscreen">
+    </iframe>
+    <div class="loading-placeholder">loading …</div>
+</body>
+</html>
+                `;
+
+                // Create blob with MIME text/html
+                const blob = new Blob([blobContent], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+
+                // 3. replace current page with blob URL → this removes the launching page from history entirely.
+                //    The only entry after this is the blob URL (which is a generated page). The blob page itself
+                //    will not appear in browser history as a visited URL because it's a blob: origin.
+                //    Moreover, any navigation inside the iframe does not affect browser history.
+                location.replace(blobUrl);
+
+                // optional: after a short delay, revoke the blob URL to free memory (but we replaced location, so we can't revoke immediately)
+                // we'll schedule revocation after a small delay (but it's okay if browser keeps it).
+                setTimeout(() => {
+                    URL.revokeObjectURL(blobUrl);
+                }, 2000);
+            }
+
+            // === Event handlers ===
+            goBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = urlInput.value;
+                if (!url.trim()) {
+                    alert('Please paste a URL first.');
+                    return;
+                }
+                const cloak = getSelectedCloak();
+                openWithoutHistory(url, cloak);
+            });
+
+            // press Enter in input field triggers go
+            urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    goBtn.click();
+                }
+            });
+
+            // reset button: clear input and focus
+            resetBtn.addEventListener('click', () => {
+                urlInput.value = '';
+                urlInput.focus();
+            });
+
+            // optional: paste shortcut hint, but just a convenience
+            urlInput.addEventListener('paste', (e) => {
+                // tiny delay to let value populate, then nothing else needed
+            });
+
+            // Pre-fill with a demo placeholder — not a real URL, just to show
+            urlInput.value = 'https://example.com';
+        })();
+    </script>
+</body>
+
+</html>
