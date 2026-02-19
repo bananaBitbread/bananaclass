@@ -1,647 +1,777 @@
-2134-9809032904-09-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | BananaClassroom</title>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Google</title>
+    <link rel="icon" href="https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        :root {
-            --banana-primary: #FFD43B;
-            --banana-secondary: #F4C430;
-            --banana-light: #FFF9DB;
-            --text-dark: #1A1A1A;
-            --text-light: #666;
-            --border-color: #E5E5E5;
-            --error: #EF4444;
-            --success: #10B981;
-            --gray-50: #FAFAFA;
-            --gray-100: #F5F5F5;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
-        .login-container {
+        /* Main container */
+        .game-hub {
             width: 100%;
-            max-width: 440px;
-        }
-
-        .login-card {
+            max-width: 1000px;
             background: white;
             border-radius: 24px;
-            padding: 48px 40px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             overflow: hidden;
         }
 
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(to right, var(--banana-primary), var(--banana-secondary));
-        }
-
-        .logo-section {
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4f5bd5 0%, #962fbf 100%);
+            color: white;
+            padding: 32px;
             text-align: center;
-            margin-bottom: 40px;
         }
 
-        .logo-wrapper {
-            display: inline-flex;
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, var(--banana-primary), var(--banana-secondary));
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
+            gap: 12px;
         }
 
-        .logo-wrapper svg {
-            width: 40px;
-            height: 40px;
-            color: white;
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
         }
 
-        .app-title {
-            font-size: 36px;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--banana-primary), var(--banana-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+        /* Controls bar */
+        .controls-bar {
+            padding: 20px 24px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .app-subtitle {
-            color: var(--text-light);
-            font-size: 16px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .input-wrapper {
+        /* Search box */
+        .search-wrapper {
+            flex: 1;
+            min-width: 250px;
             position: relative;
         }
 
-        .input-wrapper svg {
+        .search-wrapper i {
             position: absolute;
-            left: 16px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #9CA3AF;
-            width: 20px;
-            height: 20px;
+            color: #6c757d;
+            pointer-events: none;
         }
 
-        .form-input {
+        #searchInput {
             width: 100%;
-            padding: 16px 16px 16px 48px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.2s;
-            background: var(--gray-50);
-        }
-
-        .form-input:focus {
+            padding: 12px 16px 12px 44px;
+            font-size: 0.95em;
+            border: 2px solid #e9ecef;
+            border-radius: 40px;
             outline: none;
-            border-color: var(--banana-primary);
+            transition: all 0.2s;
             background: white;
-            box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.1);
         }
 
-        .password-toggle {
+        #searchInput:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        /* Sort dropdown */
+        .sort-wrapper {
+            position: relative;
+            min-width: 160px;
+        }
+
+        .sort-wrapper select {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            font-size: 0.95em;
+            border: 2px solid #e9ecef;
+            border-radius: 40px;
+            outline: none;
+            background: white;
+            appearance: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sort-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            pointer-events: none;
+        }
+
+        .sort-wrapper::after {
+            content: '';
             position: absolute;
             right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #9CA3AF;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #6c757d;
+            pointer-events: none;
         }
 
-        .password-toggle:hover {
-            color: var(--text-dark);
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        .remember-me {
+        /* Filter chips */
+        .filter-chip {
             display: flex;
             align-items: center;
             gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            font-weight: 500;
+            color: #495057;
         }
 
-        .remember-me input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--banana-primary);
+        .filter-chip:hover {
+            border-color: #adb5bd;
         }
 
-        .forgot-link {
-            color: var(--banana-secondary);
-            text-decoration: none;
-            font-weight: 600;
+        .filter-chip.active {
+            background: #764ba2;
+            border-color: #764ba2;
+            color: white;
         }
 
-        .forgot-link:hover {
+        .filter-chip.active i {
+            color: white;
+        }
+
+        .filter-chip i {
+            color: #6c757d;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            padding: 12px 24px;
+            background: white;
+            color: #6c757d;
+            font-size: 0.9em;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .clear-search {
+            color: #764ba2;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .clear-search:hover {
             text-decoration: underline;
         }
 
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(to right, var(--banana-primary), var(--banana-secondary));
-            color: var(--text-dark);
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
+        /* Game grid */
+        .games-grid {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            max-height: 550px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        /* Game card */
+        .game-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            border-color: #764ba2;
+        }
+
+        .game-card.popular {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+        }
+
+        .game-card.popular:hover {
+            border-color: #ff6b6b;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -8px;
+            right: 16px;
+            background: #ff6b6b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .game-name {
+            font-size: 1.2em;
             font-weight: 600;
+            color: #212529;
+            line-height: 1.4;
+            padding-right: 24px;
+        }
+
+        .game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .play-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #764ba2;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .play-badge i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Game Modal - WITH FULL SIZE IFRAME */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 95vw;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4f5bd5 0%, #962fbf 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header-left h2 {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-close i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* THE IFRAME - NOW TAKES ALL REMAINING SPACE */
+        .game-iframe-container {
+            flex: 1;
+            background: #1a1a1a;
+            position: relative;
+            min-height: 0; /* Important for flex child */
+            width: 100%;
+        }
+
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+            display: block;
+        }
+
+        .iframe-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            z-index: 1;
+            background: rgba(0,0,0,0.7);
+            padding: 30px;
+            border-radius: 16px;
+        }
+
+        .iframe-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .modal-footer {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            border-top: 1px solid #e9ecef;
+            flex-shrink: 0;
+        }
+
+        .modal-footer-btn {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 40px;
+            font-size: 0.85em;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 6px;
+            background: white;
+            border: 1px solid #dee2e6;
+            color: #495057;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+        .modal-footer-btn:hover {
+            background: #e9ecef;
         }
 
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
+        .modal-footer-btn i {
+            width: 14px;
+            height: 14px;
         }
 
-        .submit-btn svg {
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #868e96;
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .no-results i {
+            width: 48px;
+            height: 48px;
+            color: #adb5bd;
+        }
+
+        /* Loading state */
+        .loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #868e96;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #f1f3f5;
+            border-top-color: #764ba2;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 32px 0;
-            color: var(--text-light);
-            font-size: 14px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .divider span {
-            padding: 0 16px;
-        }
-
-        .social-login {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .social-btn:hover {
-            border-color: var(--banana-primary);
-            transform: translateY(-2px);
-        }
-
-        .social-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .register-link {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 14px;
-        }
-
-        .register-link a {
-            color: var(--banana-secondary);
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            background: #FEF2F2;
-            border: 1px solid #FECACA;
-            color: var(--error);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .error-message svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .success-message {
-            background: #F0FDF4;
-            border: 1px solid #BBF7D0;
-            color: var(--success);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .success-message svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 32px 24px;
-            }
-            
-            .social-login {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="logo-section">
-                <div class="logo-wrapper">
-                    <i data-lucide="banana"></i>
-                </div>
-                <h1 class="app-title">BananaClassroom</h1>
-                <p class="app-subtitle">Login to access your classroom</p>
+    <div class="game-hub">
+        <div class="header">
+            <h1>
+                <i data-lucide="gamepad-2"></i>
+                Chickentots Game Hub
+            </h1>
+            <p>Click any game to play instantly in a popup!</p>
+        </div>
+
+        <div class="controls-bar">
+            <div class="search-wrapper">
+                <i data-lucide="search" size="18"></i>
+                <input type="text" id="searchInput" placeholder="Search games..." autocomplete="off">
             </div>
 
-            <div class="error-message" id="errorMessage">
-                <i data-lucide="alert-circle"></i>
-                <span id="errorText"></span>
+            <div class="sort-wrapper">
+                <i data-lucide="arrow-up-down" size="18"></i>
+                <select id="sortSelect">
+                    <option value="name-asc">Name (A to Z)</option>
+                    <option value="name-desc">Name (Z to A)</option>
+                    <option value="popular-first">⭐ Popular first</option>
+                </select>
             </div>
 
-            <div class="success-message" id="successMessage">
-                <i data-lucide="check-circle"></i>
-                <span id="successText"></span>
+            <div class="filter-chip" id="popularFilter">
+                <i data-lucide="star" size="16"></i>
+                <span>Popular only</span>
             </div>
+        </div>
 
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <div class="input-wrapper">
-                        <i data-lucide="mail"></i>
-                        <input type="email" id="email" class="form-input" placeholder="teacher@example.com" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-wrapper">
-                        <i data-lucide="lock"></i>
-                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                        <button type="button" class="password-toggle" id="togglePassword">
-                            <i data-lucide="eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="remember-forgot">
-                    <label class="remember-me">
-                        <input type="checkbox" id="remember">
-                        <span>Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span>Sign In</span>
-                </button>
-            </form>
-
-            <div class="divider">
-                <span>Or continue with</span>
+        <div class="stats-bar">
+            <span id="gameCount">Loading games...</span>
+            <div class="stats-right">
+                <span id="activeFilters"></span>
+                <span class="clear-search" id="clearFilters" style="display: none;">
+                    <i data-lucide="x" size="16"></i>
+                    Clear
+                </span>
             </div>
+        </div>
 
-            <div class="social-login">
-                <button class="social-btn" id="googleLogin">
-                    <i data-lucide="mail"></i>
-                    <span>Google</span>
-                </button>
-                <button class="social-btn" id="githubLogin">
-                    <i data-lucide="github"></i>
-                    <span>GitHub</span>
+        <div id="gamesGrid" class="games-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading awesome games...
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal with FULL SIZE IFRAME -->
+    <div id="gameModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <i data-lucide="gamepad-2" size="20"></i>
+                    <h2 id="modalGameTitle">Loading game...</h2>
+                </div>
+                <button class="modal-close" onclick="closeModal()">
+                    <i data-lucide="x"></i>
                 </button>
             </div>
+            
+            <div class="game-iframe-container">
+                <div class="iframe-loading" id="iframeLoading">
+                    <div class="iframe-spinner"></div>
+                    <div>Loading game...</div>
+                </div>
+                <iframe id="gameIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-top-navigation" allowfullscreen loading="lazy"></iframe>
+            </div>
 
-            <div class="register-link">
-                <span>Don't have an account? </span>
-                <a href="#" id="registerLink">Sign up here</a>
+            <div class="modal-footer">
+                <button class="modal-footer-btn" onclick="refreshIframe()">
+                    <i data-lucide="refresh-cw"></i>
+                    Reload
+                </button>
+                <button class="modal-footer-btn" onclick="openInNewTab()">
+                    <i data-lucide="external-link"></i>
+                    Open in new tab
+                </button>
             </div>
         </div>
     </div>
 
     <script>
+        let gamesData = [];
+        let selectedGame = null;
+        let popularOnly = false;
+
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Supabase Configuration - REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
-        const SUPABASE_URL = 'https://your-project-id.supabase.co';
-        const SUPABASE_ANON_KEY = 'your-anon-key';
+        // Fetch games
+        fetch('https://bananabitbread.github.io/chickentots-player/list_games.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load games');
+                return response.json();
+            })
+            .then(games => {
+                gamesData = games;
+                applyFiltersAndSort();
+            })
+            .catch(error => {
+                document.getElementById('gamesGrid').innerHTML = 
+                    `<div class="no-results">
+                        <i data-lucide="alert-circle" size="48"></i>
+                        <div>Error loading games: ${error.message}</div>
+                    </div>`;
+                lucide.createIcons();
+            });
 
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // DOM Elements
-        const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const togglePassword = document.getElementById('togglePassword');
-        const submitBtn = document.getElementById('submitBtn');
-        const submitBtnText = submitBtn.querySelector('span');
-        const errorMessage = document.getElementById('errorMessage');
-        const errorText = document.getElementById('errorText');
-        const successMessage = document.getElementById('successMessage');
-        const successText = document.getElementById('successText');
-        const registerLink = document.getElementById('registerLink');
-        const googleLogin = document.getElementById('googleLogin');
-        const githubLogin = document.getElementById('githubLogin');
-
-        // Toggle password visibility
-        togglePassword.addEventListener('click', () => {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            const icon = togglePassword.querySelector('i');
-            icon.setAttribute('data-lucide', type === 'password' ? 'eye' : 'eye-off');
-            lucide.createIcons();
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', applyFiltersAndSort);
+        document.getElementById('sortSelect').addEventListener('change', applyFiltersAndSort);
+        
+        document.getElementById('popularFilter').addEventListener('click', function() {
+            popularOnly = !popularOnly;
+            this.classList.toggle('active');
+            applyFiltersAndSort();
         });
 
-        // Handle form submission
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            const rememberMe = document.getElementById('remember').checked;
-
-            // Validate inputs
-            if (!email || !password) {
-                showError('Please fill in all fields');
-                return;
-            }
-
-            if (!validateEmail(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
-
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtnText.textContent = 'Signing in...';
-            submitBtn.innerHTML = '<i data-lucide="loader-2"></i><span>Signing in...</span>';
-            lucide.createIcons();
-
-            try {
-                // Sign in with Supabase
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                // Store session if remember me is checked
-                if (rememberMe) {
-                    localStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
-                } else {
-                    sessionStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
-                }
-
-                // Show success message
-                showSuccess('Login successful! Redirecting...');
-
-                // Simulate redirect to dashboard
-                setTimeout(() => {
-                    window.location.href = '/dashboard.html';
-                }, 1500);
-
-            } catch (error) {
-                console.error('Login error:', error);
-                
-                // Handle specific error cases
-                if (error.message.includes('Invalid login credentials')) {
-                    showError('Invalid email or password. Please try again.');
-                } else if (error.message.includes('Email not confirmed')) {
-                    showError('Please confirm your email address before logging in.');
-                } else if (error.message.includes('rate limit')) {
-                    showError('Too many attempts. Please try again later.');
-                } else {
-                    showError('An error occurred. Please try again.');
-                }
-
-                // Reset button state
-                submitBtn.disabled = false;
-                submitBtnText.textContent = 'Sign In';
-                submitBtn.innerHTML = '<span>Sign In</span>';
-            }
+        document.getElementById('clearFilters').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('sortSelect').value = 'name-asc';
+            popularOnly = false;
+            document.getElementById('popularFilter').classList.remove('active');
+            applyFiltersAndSort();
         });
 
-        // Handle social logins
-        googleLogin.addEventListener('click', async () => {
-            submitBtn.disabled = true;
-            submitBtnText.textContent = 'Redirecting to Google...';
+        function applyFiltersAndSort() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sortBy = document.getElementById('sortSelect').value;
             
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`
+            // Filter games
+            let filtered = gamesData.filter(game => {
+                const matchesSearch = game.gameName.toLowerCase().includes(searchTerm);
+                const matchesPopular = !popularOnly || game.popular === true;
+                return matchesSearch && matchesPopular;
+            });
+
+            // Sort games
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name-asc':
+                        return a.gameName.localeCompare(b.gameName);
+                    case 'name-desc':
+                        return b.gameName.localeCompare(a.gameName);
+                    case 'popular-first':
+                        if (a.popular && !b.popular) return -1;
+                        if (!a.popular && b.popular) return 1;
+                        return a.gameName.localeCompare(b.gameName);
+                    default:
+                        return 0;
                 }
             });
 
-            if (error) {
-                showError('Google login failed. Please try again.');
-                submitBtn.disabled = false;
-                submitBtnText.textContent = 'Sign In';
-            }
-        });
+            displayGames(filtered);
+            updateStats(filtered.length);
+        }
 
-        githubLogin.addEventListener('click', async () => {
-            submitBtn.disabled = true;
-            submitBtnText.textContent = 'Redirecting to GitHub...';
+        function displayGames(games) {
+            const grid = document.getElementById('gamesGrid');
             
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`
-                }
-            });
-
-            if (error) {
-                showError('GitHub login failed. Please try again.');
-                submitBtn.disabled = false;
-                submitBtnText.textContent = 'Sign In';
+            if (games.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i data-lucide="package-search" size="48"></i>
+                        <div>No games found matching your criteria</div>
+                        <div style="font-size: 0.9em; color: #adb5bd;">Try adjusting your search or filters</div>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
             }
-        });
-
-        // Switch to registration
-        registerLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showInfo('Registration page would open here. In a real app, this would redirect to /register');
-            // In a real app: window.location.href = '/register.html';
-        });
-
-        // Utility functions
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        function showError(message) {
-            errorText.textContent = message;
-            errorMessage.style.display = 'flex';
-            successMessage.style.display = 'none';
             
-            // Auto-hide error after 5 seconds
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
+            grid.innerHTML = games.map(game => `
+                <div class="game-card ${game.popular ? 'popular' : ''}" onclick="openGamePopup('${game.gameIndex}', '${game.gameName.replace(/'/g, "\\'")}')">
+                    ${game.popular ? `
+                        <span class="popular-badge">
+                            <i data-lucide="star" size="12"></i>
+                            POPULAR
+                        </span>
+                    ` : ''}
+                    <div class="game-name">${game.gameName}</div>
+                    <div class="game-footer">
+                        <span class="play-badge">
+                            <i data-lucide="play-circle" size="18"></i>
+                            Play now
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
         }
 
-        function showSuccess(message) {
-            successText.textContent = message;
-            successMessage.style.display = 'flex';
-            errorMessage.style.display = 'none';
+        function updateStats(count) {
+            const totalGames = gamesData.length;
+            const gameCount = document.getElementById('gameCount');
+            const activeFilters = document.getElementById('activeFilters');
+            const clearBtn = document.getElementById('clearFilters');
+            
+            gameCount.innerHTML = `<i data-lucide="gamepad-2" size="16"></i> ${count} of ${totalGames} games`;
+            
+            const searchTerm = document.getElementById('searchInput').value;
+            const hasFilters = searchTerm || popularOnly;
+            
+            if (hasFilters) {
+                let filters = [];
+                if (searchTerm) filters.push(`"${searchTerm}"`);
+                if (popularOnly) filters.push('⭐ popular');
+                activeFilters.textContent = `Filtered: ${filters.join(' • ')}`;
+                clearBtn.style.display = 'flex';
+            } else {
+                activeFilters.textContent = '';
+                clearBtn.style.display = 'none';
+            }
+            
+            lucide.createIcons();
         }
 
-        function showInfo(message) {
-            // You could add an info message type if needed
-            alert(message); // Simple alert for demo
+        // Popup functions
+        function openGamePopup(gameIndex, gameName) {
+            selectedGame = { index: gameIndex, name: gameName };
+            
+            // Update modal
+            document.getElementById('modalGameTitle').textContent = gameName;
+            
+            // Show loading
+            document.getElementById('iframeLoading').style.display = 'flex';
+            
+            // Set iframe source
+            const iframe = document.getElementById('gameIframe');
+            iframe.src = `https://bananabitbread.github.io/chickentots-player/${gameIndex}`;
+            
+            // Show modal
+            document.getElementById('gameModal').style.display = 'flex';
+            
+            // Hide loading when iframe loads
+            iframe.onload = function() {
+                document.getElementById('iframeLoading').style.display = 'none';
+            };
         }
 
-        // Check for existing session
-        async function checkSession() {
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                
-                if (session && !error) {
-                    // User is already logged in, redirect to dashboard
-                    showSuccess('Already logged in! Redirecting...');
-                    setTimeout(() => {
-                        window.location.href = '/dashboard.html';
-                    }, 1000);
-                }
-            } catch (error) {
-                console.log('No active session');
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+            // Stop iframe from playing
+            document.getElementById('gameIframe').src = 'about:blank';
+            selectedGame = null;
+        }
+
+        function refreshIframe() {
+            if (selectedGame) {
+                document.getElementById('iframeLoading').style.display = 'flex';
+                const iframe = document.getElementById('gameIframe');
+                iframe.src = iframe.src; // Reload
             }
         }
 
-        // Check session on page load
-        checkSession();
+        function openInNewTab() {
+            if (selectedGame) {
+                window.open(`https://bananabitbread.github.io/chickentots-player/${selectedGame.index}`, '_blank');
+            }
+        }
 
-        // Forgot password functionality
-        document.querySelector('.forgot-link').addEventListener('click', async (e) => {
-            e.preventDefault();
-            
-            const email = prompt('Please enter your email address to reset your password:');
-            if (email && validateEmail(email)) {
-                try {
-                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                        redirectTo: `${window.location.origin}/reset-password.html`,
-                    });
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('gameModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
 
-                    if (error) throw error;
-                    
-                    alert('Password reset email sent! Check your inbox.');
-                } catch (error) {
-                    alert('Error sending reset email. Please try again.');
-                }
-            } else if (email) {
-                alert('Please enter a valid email address.');
+        // Handle escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
             }
         });
     </script>
