@@ -1,779 +1,935 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Google</title>
-    <link rel="icon" href="https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico" type="image/x-icon">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BananaClass - Game Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0a0a0a;
+            --bg-2: #111111;
+            --bg-3: #1a1a1a;
+            --bg-4: #222222;
+            --border: #2a2a2a;
+            --border-2: #333333;
+            --text: #ededed;
+            --text-2: #888888;
+            --text-3: #555555;
+            --accent: #ffffff;
+            --accent-yellow: #f5e642;
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
+            --popular: #f59e0b;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --font-mono: 'Geist Mono', 'Courier New', monospace;
+            --font-serif: 'Instrument Serif', Georgia, serif;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-mono);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* â”€â”€ Layout â”€â”€ */
+        .app {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* â”€â”€ Header â”€â”€ */
+        header {
+            padding: 48px 0 40px;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* Main container */
-        .game-hub {
-            width: 100%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            overflow: hidden;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #4f5bd5 0%, #962fbf 100%);
-            color: white;
-            padding: 32px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
-        }
-
-        /* Controls bar */
-        .controls-bar {
-            padding: 20px 24px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            gap: 16px;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px;
             flex-wrap: wrap;
-            align-items: center;
         }
 
-        /* Search box */
-        .search-wrapper {
+        .header-left {}
+
+        .logo-lockup {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { color: var(--bg); }
+
+        .logo-text {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-2);
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        header h1 em {
+            font-style: italic;
+            color: var(--accent-yellow);
+        }
+
+        .header-meta {
+            font-size: 0.8rem;
+            color: var(--text-3);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-meta .dot { color: var(--border-2); }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border: 1px solid var(--border-2);
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: var(--text-2);
+            font-family: var(--font-mono);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* â”€â”€ Toolbar â”€â”€ */
+        .toolbar {
+            padding: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-wrap {
             flex: 1;
-            min-width: 250px;
+            min-width: 220px;
             position: relative;
         }
 
-        .search-wrapper i {
+        .search-wrap svg {
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6c757d;
+            color: var(--text-3);
             pointer-events: none;
         }
 
-        #searchInput {
+        .search-input {
             width: 100%;
-            padding: 12px 16px 12px 44px;
-            font-size: 0.95em;
-            border: 2px solid #e9ecef;
-            border-radius: 40px;
+            padding: 9px 12px 9px 36px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
             outline: none;
-            transition: all 0.2s;
-            background: white;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
 
-        #searchInput:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        .search-input::placeholder { color: var(--text-3); }
+        .search-input:focus {
+            border-color: var(--border-2);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
         }
 
-        /* Sort dropdown */
-        .sort-wrapper {
+        .select-wrap {
             position: relative;
-            min-width: 160px;
+            min-width: 170px;
         }
 
-        .sort-wrapper select {
+        .select-wrap svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none;
+        }
+
+        .sort-select {
             width: 100%;
-            padding: 12px 16px 12px 44px;
-            font-size: 0.95em;
-            border: 2px solid #e9ecef;
-            border-radius: 40px;
+            padding: 9px 12px 9px 36px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
             outline: none;
-            background: white;
             appearance: none;
             cursor: pointer;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
             font-weight: 500;
-            color: #333;
-        }
-
-        .sort-wrapper i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            pointer-events: none;
-        }
-
-        .sort-wrapper::after {
-            content: '';
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid #6c757d;
-            pointer-events: none;
-        }
-
-        /* Filter chips */
-        .filter-chip {
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.2s;
+            gap: 6px;
+            white-space: nowrap;
             user-select: none;
-            font-weight: 500;
-            color: #495057;
         }
 
-        .filter-chip:hover {
-            border-color: #adb5bd;
+        .chip:hover { border-color: var(--border-2); color: var(--text); }
+
+        .chip.active {
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            color: #000;
         }
 
-        .filter-chip.active {
-            background: #764ba2;
-            border-color: #764ba2;
-            color: white;
+        .chip-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.6;
         }
 
-        .filter-chip.active i {
-            color: white;
-        }
-
-        .filter-chip i {
-            color: #6c757d;
-        }
-
-        /* Stats bar */
-        .stats-bar {
-            padding: 12px 24px;
-            background: white;
-            color: #6c757d;
-            font-size: 0.9em;
-            border-bottom: 1px solid #e9ecef;
+        /* â”€â”€ Stats row â”€â”€ */
+        .stats-row {
+            padding: 12px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-3);
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .stats-right {
-            display: flex;
-            gap: 16px;
-            align-items: center;
+        .stats-left { display: flex; align-items: center; gap: 8px; }
+
+        .count-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-2);
         }
 
-        .clear-search {
-            color: #764ba2;
+        .clear-btn {
+            color: var(--text-2);
             cursor: pointer;
-            font-weight: 500;
+            padding: 3px 8px;
+            border-radius: 4px;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
             gap: 4px;
         }
 
-        .clear-search:hover {
-            text-decoration: underline;
-        }
+        .clear-btn:hover { color: var(--text); background: var(--bg-3); }
 
-        /* Game grid */
+        /* â”€â”€ Grid â”€â”€ */
         .games-grid {
-            padding: 24px;
+            padding: 24px 0;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-            max-height: 550px;
-            overflow-y: auto;
-            background: #f8f9fa;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
         }
 
-        /* Game card */
+        /* â”€â”€ Game Card â”€â”€ */
         .game-card {
-            background: white;
-            border-radius: 16px;
+            background: var(--bg);
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            border: 2px solid transparent;
+            transition: background 0.15s;
             position: relative;
-            animation: fadeIn 0.4s ease;
             display: flex;
             flex-direction: column;
             gap: 12px;
+            min-height: 110px;
+            animation: cardIn 0.3s ease both;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .game-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-            border-color: #764ba2;
+            background: var(--bg-2);
         }
 
-        .game-card.popular {
-            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+        .game-card:hover .card-arrow {
+            opacity: 1;
+            transform: translate(2px, -2px);
         }
 
-        .game-card.popular:hover {
-            border-color: #ff6b6b;
+        .game-card.popular-card {
+            background: color-mix(in srgb, var(--bg) 85%, #f59e0b 15%);
         }
 
-        .popular-badge {
-            position: absolute;
-            top: -8px;
-            right: 16px;
-            background: #ff6b6b;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.75em;
-            font-weight: bold;
-            display: flex;
+        .game-card.popular-card:hover {
+            background: color-mix(in srgb, var(--bg-2) 80%, #f59e0b 20%);
+        }
+
+        .popular-tag {
+            display: inline-flex;
             align-items: center;
             gap: 4px;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .game-name {
-            font-size: 1.2em;
+            font-size: 0.65rem;
             font-weight: 600;
-            color: #212529;
-            line-height: 1.4;
-            padding-right: 24px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--popular);
+            padding: 2px 7px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 3px;
+            width: fit-content;
         }
 
-        .game-footer {
+        .card-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: auto;
         }
 
-        .play-badge {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #764ba2;
-            font-weight: 500;
-            font-size: 0.9em;
+        .card-index {
+            font-size: 0.68rem;
+            color: var(--text-3);
+            font-family: var(--font-mono);
         }
 
-        .play-badge i {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Game Modal - WITH FULL SIZE IFRAME */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.2s;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 24px;
-            width: 95vw;
-            height: 95vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            animation: slideUp 0.3s;
-            overflow: hidden;
-        }
-
-        .modal-header {
-            padding: 12px 20px;
-            background: linear-gradient(135deg, #4f5bd5 0%, #962fbf 100%);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .card-arrow {
+            color: var(--text-3);
+            opacity: 0;
+            transition: all 0.15s;
             flex-shrink: 0;
         }
 
-        .modal-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-header-left h2 {
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .modal-close:hover {
-            background: rgba(255,255,255,0.3);
-            transform: rotate(90deg);
-        }
-
-        .modal-close i {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* THE IFRAME - NOW TAKES ALL REMAINING SPACE */
-        .game-iframe-container {
-            flex: 1;
-            background: #1a1a1a;
-            position: relative;
-            min-height: 0; /* Important for flex child */
-            width: 100%;
-        }
-
-        #gameIframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-            display: block;
-        }
-
-        .iframe-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            z-index: 1;
-            background: rgba(0,0,0,0.7);
-            padding: 30px;
-            border-radius: 16px;
-        }
-
-        .iframe-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .modal-footer {
-            padding: 10px 20px;
-            background: #f8f9fa;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            border-top: 1px solid #e9ecef;
-            flex-shrink: 0;
-        }
-
-        .modal-footer-btn {
-            padding: 6px 14px;
-            border: none;
-            border-radius: 40px;
-            font-size: 0.85em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: white;
-            border: 1px solid #dee2e6;
-            color: #495057;
-        }
-
-        .modal-footer-btn:hover {
-            background: #e9ecef;
-        }
-
-        .modal-footer-btn i {
-            width: 14px;
-            height: 14px;
-        }
-
-        /* No results */
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #868e96;
+        /* â”€â”€ Empty state â”€â”€ */
+        .empty-state, .loading-state {
             grid-column: 1 / -1;
+            padding: 80px 40px;
+            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
         }
 
-        .no-results i {
-            width: 48px;
-            height: 48px;
-            color: #adb5bd;
+        .empty-icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+            filter: grayscale(1);
+            opacity: 0.4;
         }
 
-        /* Loading state */
-        .loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px;
-            color: #868e96;
+        .empty-title {
+            font-size: 0.9rem;
+            color: var(--text-2);
+            font-weight: 500;
+        }
+
+        .empty-sub {
+            font-size: 0.78rem;
+            color: var(--text-3);
+        }
+
+        .loader {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--border-2);
+            border-top-color: var(--text-2);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* â”€â”€ Modal â”€â”€ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            animation: fadeOverlay 0.15s;
+        }
+
+        @keyframes fadeOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: var(--bg-2);
+            border: 1px solid var(--border-2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 1100px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
+        }
+
+        @keyframes modalUp {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .modal-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .modal-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-dot-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .mdot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-2);
+        }
+
+        .mdot-red { background: #ff5f56; }
+        .mdot-yellow { background: #febc2e; }
+        .mdot-green { background: #28c840; }
+        .mdot-red, .mdot-yellow, .mdot-green { cursor: pointer; transition: opacity 0.15s; }
+        .mdot-red:hover, .mdot-yellow:hover, .mdot-green:hover { opacity: 0.8; }
+
+        .modal-title {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-2);
+            font-family: var(--font-mono);
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .modal-title span { color: var(--text-3); margin: 0 4px; }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .modal-btn {
+            padding: 5px 12px;
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.12s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .modal-btn:hover {
+            border-color: var(--border-2);
+            color: var(--text);
+            background: var(--bg-4);
+        }
+
+        .modal-iframe-wrap {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+            width: 100%;
+            background: #fff;
+        }
+
+        #gameIframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .iframe-loader {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            justify-content: center;
+            gap: 14px;
+            z-index: 2;
         }
 
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid #f1f3f5;
-            border-top-color: #764ba2;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .iframe-loader-text {
+            font-size: 0.78rem;
+            color: var(--text-3);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .modal-launch-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .modal-launch-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .modal-hint {
+            font-size: 0.7rem;
+            color: var(--text-3);
+            font-family: var(--font-mono);
+        }
+
+        /* â”€â”€ Footer â”€â”€ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 0;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer-left {
+            font-size: 0.72rem;
+            color: var(--text-3);
+            font-family: var(--font-mono);
+        }
+
+        .footer-left strong { color: var(--text-2); }
+
+        .kbd {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 5px;
+            background: var(--bg-3);
+            border: 1px solid var(--border-2);
+            border-radius: 3px;
+            font-size: 0.65rem;
+            color: var(--text-3);
+            font-family: var(--font-mono);
         }
     </style>
 </head>
 <body>
-    <div class="game-hub">
-        <div class="header">
-            <h1>
-                <i data-lucide="gamepad-2"></i>
-                BananaClass
-            </h1>
-            <p>Click any game to play instantly in a popup!</p>
-        </div>
-
-        <div class="controls-bar">
-            <div class="search-wrapper">
-                <i data-lucide="search" size="18"></i>
-                <input type="text" id="searchInput" placeholder="Search games..." autocomplete="off">
+<div class="app">
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <div class="logo-lockup">
+                <div class="logo-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="11" width="4" height="5" rx="1"/>
+                        <rect x="14" y="11" width="4" height="5" rx="1"/>
+                        <path d="M6 12V9a6 6 0 0 1 12 0v3"/>
+                        <path d="M5 12h14"/>
+                    </svg>
+                </div>
+                <span class="logo-text">BananaClass</span>
             </div>
-
-            <div class="sort-wrapper">
-                <i data-lucide="arrow-up-down" size="18"></i>
-                <select id="sortSelect">
-                    <option value="name-asc">Name (A to Z)</option>
-                    <option value="name-desc">Name (Z to A)</option>
-                    <option value="popular-first">⭐ Popular first</option>
-                </select>
-            </div>
-
-            <div class="filter-chip" id="popularFilter">
-                <i data-lucide="star" size="16"></i>
-                <span>Popular only</span>
+            <h1>Game <em>Hub</em></h1>
+            <div class="header-meta">
+                <span id="headerCount">â€” games</span>
+                <span class="dot">Â·</span>
+                <span>Click to play instantly</span>
             </div>
         </div>
-
-        <div class="stats-bar">
-            <span id="gameCount">Loading games...</span>
-            <div class="stats-right">
-                <span id="activeFilters"></span>
-                <span class="clear-search" id="clearFilters" style="display: none;">
-                    <i data-lucide="x" size="16"></i>
-                    Clear
-                </span>
-            </div>
+        <div class="status-pill">
+            <span class="status-dot"></span>
+            <span>All systems operational</span>
         </div>
+    </header>
 
-        <div id="gamesGrid" class="games-grid">
-            <div class="loading">
-                <div class="spinner"></div>
-                Loading awesome games...
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input class="search-input" id="searchInput" type="text" placeholder="Search games..." autocomplete="off">
+        </div>
+        <div class="select-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/>
+            </svg>
+            <select class="sort-select" id="sortSelect">
+                <option value="name-asc">Name: A â†’ Z</option>
+                <option value="name-desc">Name: Z â†’ A</option>
+                <option value="popular-first">Popular first</option>
+            </select>
+        </div>
+        <div class="chip" id="popularChip">
+            <span class="chip-dot"></span>
+            Popular only
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stats-left">
+            <span class="count-badge" id="countBadge">0</span>
+            <span id="statsLabel">games</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <span id="activeFilterText" style="font-size:0.72rem;"></span>
+            <div class="clear-btn" id="clearBtn" style="display:none;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                Clear filters
             </div>
         </div>
     </div>
 
-    <!-- Game Modal with FULL SIZE IFRAME -->
-    <div id="gameModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-header-left">
-                    <i data-lucide="gamepad-2" size="20"></i>
-                    <h2 id="modalGameTitle">Loading game...</h2>
-                </div>
-                <button class="modal-close" onclick="closeModal()">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-            
-            <div class="game-iframe-container">
-                <div class="iframe-loading" id="iframeLoading">
-                    <div class="iframe-spinner"></div>
-                    <div>Loading game...</div>
-                </div>
-                <iframe id="gameIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-top-navigation" allowfullscreen loading="lazy"></iframe>
-            </div>
+    <!-- Grid -->
+    <div id="gamesGrid" class="games-grid">
+        <div class="loading-state">
+            <div class="loader"></div>
+            <span style="font-size:0.78rem;color:var(--text-3);">Loading games...</span>
+        </div>
+    </div>
 
-            <div class="modal-footer">
-                <button class="modal-footer-btn" onclick="refreshIframe()">
-                    <i data-lucide="refresh-cw"></i>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-left">
+            <strong>BananaClass</strong> Game Hub &mdash; Click any game to play in a popup
+        </div>
+        <div style="font-size:0.7rem;color:var(--text-3);display:flex;gap:10px;">
+            <span><kbd class="kbd">Esc</kbd> Close popup</span>
+            <span><kbd class="kbd">/</kbd> Focus search</span>
+        </div>
+    </footer>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="gameModal">
+    <div class="modal-box">
+        <div class="modal-topbar">
+            <div class="modal-topbar-left">
+                <div class="modal-dot-group">
+                    <div class="mdot mdot-red" onclick="closeModal()" title="Close"></div>
+                    <div class="mdot mdot-yellow" onclick="refreshIframe()" title="Refresh"></div>
+                    <div class="mdot mdot-green" onclick="openInNewTab()" title="Open in new tab"></div>
+                </div>
+                <div class="modal-title">
+                    <span>bananaclass</span><span>/</span><span id="modalGameTitle">â€”</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="refreshIframe()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                     Reload
                 </button>
-                <button class="modal-footer-btn" onclick="openInNewTab()">
-                    <i data-lucide="external-link"></i>
-                    Open in new tab
+                <button class="modal-btn" onclick="openInNewTab()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    New tab
                 </button>
             </div>
         </div>
+        <div class="modal-iframe-wrap">
+            <div class="iframe-loader" id="iframeLoader">
+                <div class="loader"></div>
+                <span class="iframe-loader-text">Loading game...</span>
+            </div>
+            <iframe id="gameIframe"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-top-navigation"
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+        </div>
     </div>
+</div>
 
-    <script>
-        let gamesData = [];
-        let selectedGame = null;
-        let popularOnly = false;
+<script>
+    let gamesData = [];
+    let selectedGame = null;
+    let popularOnly = false;
 
-        // Initialize Lucide icons
-        lucide.createIcons();
+    // Keyboard shortcut: "/" focuses search
+    document.addEventListener('keydown', e => {
+        if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+        if (e.key === 'Escape') closeModal();
+    });
 
-        // Fetch games
-        fetch('https://bananabitbread.github.io/chickentots-player/list_games.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load games');
-                return response.json();
-            })
-            .then(games => {
-                gamesData = games;
-                applyFiltersAndSort();
-            })
-            .catch(error => {
-                document.getElementById('gamesGrid').innerHTML = 
-                    `<div class="no-results">
-                        <i data-lucide="alert-circle" size="48"></i>
-                        <div>Error loading games: ${error.message}</div>
-                    </div>`;
-                lucide.createIcons();
-            });
-
-        // Event listeners
-        document.getElementById('searchInput').addEventListener('input', applyFiltersAndSort);
-        document.getElementById('sortSelect').addEventListener('change', applyFiltersAndSort);
-        
-        document.getElementById('popularFilter').addEventListener('click', function() {
-            popularOnly = !popularOnly;
-            this.classList.toggle('active');
+    // Fetch games
+    fetch('https://bananabitbread.github.io/chickentots-player/list_games.json')
+        .then(r => { if (!r.ok) throw new Error('Failed to load'); return r.json(); })
+        .then(data => {
+            gamesData = data;
+            document.getElementById('headerCount').textContent = `${data.length} games`;
             applyFiltersAndSort();
+        })
+        .catch(err => {
+            document.getElementById('gamesGrid').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">âš </div>
+                    <div class="empty-title">Failed to load games</div>
+                    <div class="empty-sub">${err.message}</div>
+                </div>`;
         });
 
-        document.getElementById('clearFilters').addEventListener('click', function() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('sortSelect').value = 'name-asc';
-            popularOnly = false;
-            document.getElementById('popularFilter').classList.remove('active');
-            applyFiltersAndSort();
+    // Listeners
+    document.getElementById('searchInput').addEventListener('input', applyFiltersAndSort);
+    document.getElementById('sortSelect').addEventListener('change', applyFiltersAndSort);
+    document.getElementById('popularChip').addEventListener('click', () => {
+        popularOnly = !popularOnly;
+        document.getElementById('popularChip').classList.toggle('active', popularOnly);
+        applyFiltersAndSort();
+    });
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('sortSelect').value = 'name-asc';
+        popularOnly = false;
+        document.getElementById('popularChip').classList.remove('active');
+        applyFiltersAndSort();
+    });
+
+    function applyFiltersAndSort() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const sort = document.getElementById('sortSelect').value;
+
+        let filtered = gamesData.filter(g =>
+            g.gameName.toLowerCase().includes(q) && (!popularOnly || g.popular)
+        );
+
+        filtered.sort((a, b) => {
+            if (sort === 'name-asc') return a.gameName.localeCompare(b.gameName);
+            if (sort === 'name-desc') return b.gameName.localeCompare(a.gameName);
+            if (sort === 'popular-first') {
+                if (a.popular && !b.popular) return -1;
+                if (!a.popular && b.popular) return 1;
+                return a.gameName.localeCompare(b.gameName);
+            }
+            return 0;
         });
 
-        function applyFiltersAndSort() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const sortBy = document.getElementById('sortSelect').value;
-            
-            // Filter games
-            let filtered = gamesData.filter(game => {
-                const matchesSearch = game.gameName.toLowerCase().includes(searchTerm);
-                const matchesPopular = !popularOnly || game.popular === true;
-                return matchesSearch && matchesPopular;
-            });
+        renderGrid(filtered);
+        updateStats(filtered.length, q);
+    }
 
-            // Sort games
-            filtered.sort((a, b) => {
-                switch(sortBy) {
-                    case 'name-asc':
-                        return a.gameName.localeCompare(b.gameName);
-                    case 'name-desc':
-                        return b.gameName.localeCompare(a.gameName);
-                    case 'popular-first':
-                        if (a.popular && !b.popular) return -1;
-                        if (!a.popular && b.popular) return 1;
-                        return a.gameName.localeCompare(b.gameName);
-                    default:
-                        return 0;
-                }
-            });
+    function renderGrid(games) {
+        const grid = document.getElementById('gamesGrid');
 
-            displayGames(filtered);
-            updateStats(filtered.length);
+        if (!games.length) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">ðŸ”</div>
+                    <div class="empty-title">No games found</div>
+                    <div class="empty-sub">Try a different search term or clear filters</div>
+                </div>`;
+            return;
         }
 
-        function displayGames(games) {
-            const grid = document.getElementById('gamesGrid');
-            
-            if (games.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-results">
-                        <i data-lucide="package-search" size="48"></i>
-                        <div>No games found matching your criteria</div>
-                        <div style="font-size: 0.9em; color: #adb5bd;">Try adjusting your search or filters</div>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-            
-            grid.innerHTML = games.map(game => `
-                <div class="game-card ${game.popular ? 'popular' : ''}" onclick="openGamePopup('${game.gameIndex}', '${game.gameName.replace(/'/g, "\\'")}')">
-                    ${game.popular ? `
-                        <span class="popular-badge">
-                            <i data-lucide="star" size="12"></i>
-                            POPULAR
-                        </span>
-                    ` : ''}
-                    <div class="game-name">${game.gameName}</div>
-                    <div class="game-footer">
-                        <span class="play-badge">
-                            <i data-lucide="play-circle" size="18"></i>
-                            Play now
-                        </span>
-                    </div>
+        grid.innerHTML = games.map((g, i) => `
+            <div class="game-card ${g.popular ? 'popular-card' : ''}"
+                data-index="${escAttr(g.gameIndex)}"
+                data-name="${escAttr(g.gameName)}"
+                data-rom="${escAttr(g.romName || '')}"
+                style="animation-delay:${Math.min(i*18,300)}ms">
+                ${g.popular ? `<div class="popular-tag">â˜… Popular</div>` : ''}
+                <div class="card-name">${escHtml(g.gameName)}</div>
+                <div class="card-footer">
+                    <span class="card-index">${escHtml(g.gameIndex)}</span>
+                    <svg class="card-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17 17 7M7 7h10v10"/>
+                    </svg>
                 </div>
-            `).join('');
-            
-            lucide.createIcons();
-        }
+            </div>
+        `).join('');
 
-        function updateStats(count) {
-            const totalGames = gamesData.length;
-            const gameCount = document.getElementById('gameCount');
-            const activeFilters = document.getElementById('activeFilters');
-            const clearBtn = document.getElementById('clearFilters');
-            
-            gameCount.innerHTML = `<i data-lucide="gamepad-2" size="16"></i> ${count} of ${totalGames} games`;
-            
-            const searchTerm = document.getElementById('searchInput').value;
-            const hasFilters = searchTerm || popularOnly;
-            
-            if (hasFilters) {
-                let filters = [];
-                if (searchTerm) filters.push(`"${searchTerm}"`);
-                if (popularOnly) filters.push('⭐ popular');
-                activeFilters.textContent = `Filtered: ${filters.join(' • ')}`;
-                clearBtn.style.display = 'flex';
-            } else {
-                activeFilters.textContent = '';
-                clearBtn.style.display = 'none';
-            }
-            
-            lucide.createIcons();
-        }
-
-        // Popup functions
-        function openGamePopup(gameIndex, gameName) {
-            selectedGame = { index: gameIndex, name: gameName };
-            
-            // Update modal
-            document.getElementById('modalGameTitle').textContent = gameName;
-            
-            // Show loading
-            document.getElementById('iframeLoading').style.display = 'flex';
-            
-            // Set iframe source
-            const iframe = document.getElementById('gameIframe');
-            iframe.src = `https://bananabitbread.github.io/chickentots-player/${gameIndex}`;
-            
-            // Show modal
-            document.getElementById('gameModal').style.display = 'flex';
-            
-            // Hide loading when iframe loads
-            iframe.onload = function() {
-                document.getElementById('iframeLoading').style.display = 'none';
-            };
-        }
-
-        function closeModal() {
-            document.getElementById('gameModal').style.display = 'none';
-            // Stop iframe from playing
-            document.getElementById('gameIframe').src = 'about:blank';
-            selectedGame = null;
-        }
-
-        function refreshIframe() {
-            if (selectedGame) {
-                document.getElementById('iframeLoading').style.display = 'flex';
-                const iframe = document.getElementById('gameIframe');
-                iframe.src = iframe.src; // Reload
-            }
-        }
-
-        function openInNewTab() {
-            if (selectedGame) {
-                window.open(`https://bananabitbread.github.io/chickentots-player/${selectedGame.index}`, '_blank');
-            }
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('gameModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // Handle escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
+        grid.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => {
+                openGame(card.dataset.index, card.dataset.name, card.dataset.rom || null);
+            });
         });
-    </script>
+    }
+
+    function escAttr(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function updateStats(count, q) {
+        document.getElementById('countBadge').textContent = count;
+        document.getElementById('statsLabel').textContent = count === 1 ? 'game' : 'games';
+
+        const hasFilters = q || popularOnly;
+        const filterParts = [];
+        if (q) filterParts.push(`"${q}"`);
+        if (popularOnly) filterParts.push('popular');
+
+        document.getElementById('activeFilterText').textContent = filterParts.length ? `Filtered by ${filterParts.join(' + ')}` : '';
+        document.getElementById('clearBtn').style.display = hasFilters ? 'flex' : 'none';
+    }
+
+    function openGame(index, name, romName = null) {
+        selectedGame = { index, name, romName };
+        document.getElementById('modalGameTitle').textContent = name;
+        document.getElementById('iframeLoader').style.display = 'flex';
+
+        const iframe = document.getElementById('gameIframe');
+        const baseUrl = 'https://bananabitbread.github.io/chickentots-player/';
+        iframe.src = selectedGame.romName
+            ? `${baseUrl}${index}#${selectedGame.romName}`
+            : `${baseUrl}${index}`;
+        iframe.onload = () => { document.getElementById('iframeLoader').style.display = 'none'; };
+
+        document.getElementById('gameModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('gameModal').classList.remove('open');
+        document.getElementById('gameIframe').src = 'about:blank';
+        document.body.style.overflow = '';
+        selectedGame = null;
+    }
+
+    function refreshIframe() {
+        if (!selectedGame) return;
+        document.getElementById('iframeLoader').style.display = 'flex';
+        const iframe = document.getElementById('gameIframe');
+        const src = iframe.src;
+        iframe.src = 'about:blank';
+        setTimeout(() => { iframe.src = src; }, 80);
+    }
+
+    function openInNewTab() {
+        if (!selectedGame) return;
+        const baseUrl = 'https://bananabitbread.github.io/chickentots-player/';
+        const url = selectedGame.romName
+            ? `${baseUrl}${selectedGame.index}#${selectedGame.romName}`
+            : `${baseUrl}${selectedGame.index}`;
+        window.open(url, '_blank');
+    }
+
+    window.addEventListener('click', e => {
+        if (e.target === document.getElementById('gameModal')) closeModal();
+    });
+
+    function escHtml(s) {
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+</script>
 </body>
 </html>
